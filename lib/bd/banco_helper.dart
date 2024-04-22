@@ -31,6 +31,7 @@ class BancoHelper {
   static const tabelaC = 'cliente';
   static const colunaIdCliente = 'id';
   static const colunaNomeCliente = 'nome';
+  static const colunaEmailCliente = 'email';
 
   static late Database _bancoDeDados;
 
@@ -63,7 +64,8 @@ class BancoHelper {
   await db.execute(''' 
         CREATE TABLE $tabelaC (
           $colunaIdCliente INTEGER PRIMARY KEY,
-          $colunaNomeCliente TEXT NOT NULL
+          $colunaNomeCliente TEXT NOT NULL,
+          $colunaEmailCliente TEXT NOT NULL
         );
   ''');
   }

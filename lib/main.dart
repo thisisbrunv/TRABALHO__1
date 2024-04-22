@@ -60,6 +60,7 @@ void carregarClientesSalvos() async {
     final nomePS = 'PrestServ ${rnd.nextInt(999999)}';
     final emailPS = 'PrestServ ${rnd.nextInt(999999)}';
     final telefonePS = rnd.nextInt(99);
+    
 
     Map<String, dynamic> row = {
       BancoHelper.colunaNomePSer: nomePS,
@@ -73,6 +74,43 @@ void carregarClientesSalvos() async {
         'Pessoa inserida com ID $id para $nomePS');
 
     carregarPessoasSalvas();
+  }
+
+  Future<void> inserirRegistroServ() async {
+    var rnd = Random();
+
+    final nomeServ = 'Serv ${rnd.nextInt(999999)}';
+  
+    Map<String, dynamic> row = {
+      BancoHelper.colunaNomeServ: nomeServ,
+    };
+
+    final id = await bdHelper.inserir(row);
+
+    print(
+        'Pessoa inserida com ID $id para $nomeServ');
+
+    carregarServicosSalvos();
+  }
+
+  Future<void> inserirRegistroCliente() async {
+    var rnd = Random();
+
+    final nomeCliente = 'cliente ${rnd.nextInt(999999)}';
+    final emailCliente = 'cliente ${rnd.nextInt(999999)}';
+    
+
+    Map<String, dynamic> row = {
+      BancoHelper.colunaNomeCliente: nomeCliente,
+      BancoHelper.colunaEmailCliente: emailCliente,
+    };
+
+    final id = await bdHelper.inserir(row);
+
+    print(
+        'Pessoa inserida com ID $id para $nomeCliente');
+
+    carregarClientesSalvos();
   }
 
   void removerTudo() async {

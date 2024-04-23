@@ -51,8 +51,8 @@ class BancoHelper {
         CREATE TABLE $tabela (
           $colunaIdPSer INTEGER PRIMARY KEY,
           $colunaNomePSer TEXT, 
-          $colunaEmailPSer CHAR,
-          $colunaTelefonePSer INTEGER 
+          $colunaEmailPSer TEXT,
+          $colunaTelefonePSer INTEGER
         );
         ''');
        await db.execute(''' 

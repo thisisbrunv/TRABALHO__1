@@ -16,7 +16,7 @@ class BancoHelper {
   static const colunaNomePSer = 'nome';
   static const colunaEmailPSer = 'email';
   static const colunaTelefonePSer = 'telefone';
-  static const tipoServ = 'tipoServ';
+  //static const tipoServ = 'tipoServ';
 
 
   //pagina serviço
@@ -50,22 +50,22 @@ class BancoHelper {
     await db.execute('''
         CREATE TABLE $tabela (
           $colunaIdPSer INTEGER PRIMARY KEY,
-          $colunaNomePSer TEXT NOT NULL,
-          $colunaEmailPSer TEXT NOT NULL,
-          $colunaTelefonePSer INTEGER
+          $colunaNomePSer TEXT, 
+          $colunaEmailPSer CHAR,
+          $colunaTelefonePSer INTEGER 
         );
         ''');
        await db.execute(''' 
        CREATE TABLE $tabelaServ (
           $colunaIdServ INTEGER PRIMARY KEY,
-          $colunaNomeServ TEXT NOT NULL
+          $colunaNomeServ TEXT
           );
            ''');
   await db.execute(''' 
         CREATE TABLE $tabelaC (
           $colunaIdCliente INTEGER PRIMARY KEY,
-          $colunaNomeCliente TEXT NOT NULL,
-          $colunaEmailCliente TEXT NOT NULL
+          $colunaNomeCliente TEXT,
+          $colunaEmailCliente TEXT 
         );
   ''');
   }
@@ -150,9 +150,10 @@ class BancoHelper {
     return [
       for (final {
             colunaIdCliente: pIdCli as int,
-            colunaNomeServ: pNomeCli as String
+            colunaNomeCliente: pNomeCli as String,
+            colunaEmailCliente: pEmailCli as String
           } in ClienteNoBanco)
-       cliente(id: pIdCli, nome: pNomeCli),
+       cliente(id: pIdCli, nome: pNomeCli, email: pEmailCli),
    ];
   }
 

@@ -10,24 +10,31 @@ import 'dart:math';
 
 
 
-void main() => runApp(MainApp());
- // runApp(const MainApp());
+void main() => runApp(const MainApp());
+// runApp(const MainApp());
 //}
 
-class MainApp extends StatefulWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: MainScreen(),
+    );
+  }
 }
 
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
 
-class _MainAppState extends State<MainApp> {
-
-
-
+class _MainScreenState extends State<MainScreen> {
   var bdHelper = BancoHelper();
+
   
   final List<PrestServ> _dados = [];
   final List<Servico> _dadosServ = [];

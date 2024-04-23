@@ -8,6 +8,8 @@ import 'package:trab_1/pessoa_detalhe.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+
+
 void main() => runApp(MainApp());
  // runApp(const MainApp());
 //}
@@ -19,7 +21,29 @@ class MainApp extends StatefulWidget {
   State<MainApp> createState() => _MainAppState();
 }
 
+class NewPageScreen extends StatelessWidget {
+  final String texto;
+
+  NewPageScreen(this.texto);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: Text(texto),
+      ),
+    );
+  }
+}
+
 class _MainAppState extends State<MainApp> {
+
+  int _indiceAtual = 0;
+  final List<Widget> _telas = [
+    NewPageScreen("Minha conta"),
+    NewPageScreen("Meus pedidos"),
+    NewPageScreen("Favoritos")
+  ];
 
   var bdHelper = BancoHelper();
   
@@ -126,7 +150,7 @@ void carregarClientesSalvos() async {
     carregarClientesSalvos();
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -167,7 +191,34 @@ void carregarClientesSalvos() async {
                           removerTudo();
                         },
                         child: const Text('Deletar Tudo')),
-                  ElevatedButton(
+                ],
+                ),
+                Row( 
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+ElevatedButton(
+  onPressed: (){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return Builder( 
+            builder: (BuildContext context) {
+              return const ServDetalhe(
+                informacaoServ: null,
+              );
+            },
+          );
+        },
+      ),
+    ).then((value) {
+      carregarServicosSalvos();
+    });
+  },
+  child: const Text('Adicionar Serviço'),
+)
+                    /*
+                    ElevatedButton(
                         onPressed: (){
                           Navigator.push(
                   context,
@@ -181,8 +232,34 @@ void carregarClientesSalvos() async {
                   });
                         },
                         child: const Text('Adicionar Serviço'),
-                  ),
-                  ElevatedButton(
+                  ),*/
+                  ]
+                ),
+                  Row( mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+ElevatedButton(
+  onPressed: (){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return Builder( 
+            builder: (BuildContext context) {
+              return const ClienteDetalhe(
+                informacaoCliente: null,
+              );
+            },
+          );
+        },
+      ),
+    ).then((value) {
+      carregarClientesSalvos();
+    });
+  },
+  child: const Text('Adicionar Cliente'),
+)
+
+                   /* ElevatedButton(
                         onPressed: (){
                           Navigator.push(
                   context,
@@ -196,13 +273,13 @@ void carregarClientesSalvos() async {
                   });
                         },
                         child: const Text('Adicionar Cliente'),
-                  )
+                  ),*/
+                  ]
+                )
               ],
-            ),
-          ],
+            ),    
         ),
-      ),
-    ),    
+      ),  
        floatingActionButton: Builder(
           builder: (BuildContext context) {
             return FloatingActionButton(
@@ -222,7 +299,7 @@ void carregarClientesSalvos() async {
             );
           },
         ),
-      ),
-    );
+        ),
+      );
+    }
   }
-}

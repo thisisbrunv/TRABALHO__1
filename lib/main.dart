@@ -21,29 +21,11 @@ class MainApp extends StatefulWidget {
   State<MainApp> createState() => _MainAppState();
 }
 
-class NewPageScreen extends StatelessWidget {
-  final String texto;
 
-  NewPageScreen(this.texto);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text(texto),
-      ),
-    );
-  }
-}
 
 class _MainAppState extends State<MainApp> {
 
-  int _indiceAtual = 0;
-  final List<Widget> _telas = [
-    NewPageScreen("Minha conta"),
-    NewPageScreen("Meus pedidos"),
-    NewPageScreen("Favoritos")
-  ];
+
 
   var bdHelper = BancoHelper();
   

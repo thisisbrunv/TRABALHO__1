@@ -282,24 +282,57 @@ ElevatedButton(
     );
     }
 }
-class SearchForm extends StatefulWidget {
+class SearchResultScreen extends StatelessWidget {
+  final String searchTerm;
+
+  const SearchResultScreen({super.key, required this.searchTerm});
+
   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Resultados da busca'),
+      ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: BancoHelper.instance.queryByName(searchTerm),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            List<Map<String, dynamic>> data= snapshot.data!;
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(data[index][BancoHelper.colunaNomeServ]),
+                );
+              },
+            );
+          }
+        },
+      ),
+      floatingActionButton: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Fechar'))
+    );
+  }
+}
+
+class SearchForm extends StatefulWidget {
+  const SearchForm({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
   _SearchFormState createState() => _SearchFormState();
 }
 
 class _SearchFormState extends State<SearchForm> {
   final TextEditingController _controller = TextEditingController();
-  //List<Map<String, dynamic>>? _searchResult;
-
-/*  void _search() async {
-    final String name = _controller.text;
-    List<Map<String, dynamic>> result =
-        await BancoHelper.instance.queryByName(name);
-    setState(() {
-      _searchResult = result;
-    });
-  }*/
-
+ 
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -319,21 +352,21 @@ class _SearchFormState extends State<SearchForm> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SearchResultScreen(searchTerm: BancoHelper.colunaNomeServ),
+                  builder: (context) => const SearchResultScreen(searchTerm: BancoHelper.colunaNomeServ),
                 ),
               );
             },
-            child: Text('Busca'),
+            child: const Text('Busca'),
           ),
         ],
       ),
     );
   }
 }
-class SearchResultScreen extends StatelessWidget {
+/*class SearchResultScreen extends StatelessWidget {
   final String searchTerm;
 
-  SearchResultScreen({required this.searchTerm});
+  const SearchResultScreen({super.key, required this.searchTerm});
 
   @override
   Widget build(BuildContext context) {
@@ -368,4 +401,4 @@ class SearchResultScreen extends StatelessWidget {
                     child: const Text('Fechar'))
     );
   }
-}
+}*/

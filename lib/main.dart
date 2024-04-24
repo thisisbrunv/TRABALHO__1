@@ -175,7 +175,7 @@ void carregarClientesSalvos() async {
                     },
                   ),
                 ),
-                /*Expanded(child: ListView.builder(
+                Expanded(child: ListView.builder(
                   itemCount: _dadosServ.length,
                   itemBuilder: (context, index){
                       return ListTile(
@@ -193,7 +193,7 @@ void carregarClientesSalvos() async {
                         },
                       );
                 })
-                ), */
+                ), 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -361,6 +361,11 @@ class SearchResultScreen extends StatelessWidget {
           }
         },
       ),
+      floatingActionButton: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Fechar'))
     );
   }
 }

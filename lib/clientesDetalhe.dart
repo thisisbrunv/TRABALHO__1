@@ -103,7 +103,7 @@ class _ClienteDetalheState extends State<ClienteDetalhe> {
                           BancoHelper.colunaNomeCliente: _controllerNomeCliente.text
                         };
         
-                        final idEmOperacao = await bdHelper.inserir(row);
+                        final idEmOperacao = await bdHelper.inserirCliente(row);
                         _controllerIdCliente.text = idEmOperacao.toString();
                       }
                     }

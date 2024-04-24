@@ -17,21 +17,19 @@ class BancoHelper {
   static const colunaEmailPSer = 'email';
   static const colunaTelefonePSer = 'telefone';
   
-
-
   //pagina serviço
 
   static const tabelaServ = 'servico';
-  static const colunaIdServ = 'idServico';
-  static const colunaNomeServ = 'nomeServico';
+  static const colunaIdServ = 'id';
+  static const colunaNomeServ = 'nome';
 
 
   //pagina cliente
 
   static const tabelaC = 'cliente';
-  static const colunaIdCliente = 'idCliente';
-  static const colunaNomeCliente = 'nomeCliente';
-  static const colunaEmailCliente = 'emailCliente';
+  static const colunaIdCliente = 'id';
+  static const colunaNomeCliente = 'nome';
+  static const colunaEmailCliente = 'email';
 
   static Database? _database;
 
@@ -142,12 +140,12 @@ Future<int> inserirCliente(Map<String, dynamic> row) async {
 
     return [
       for (final {
-            colunaIdPSer: pIdPS as int,
+            colunaIdPSer: pIdPSer as int,
             colunaNomePSer: pNomePS as String,
             colunaEmailPSer: pEmailPS as String,
             colunaTelefonePSer: pTelefonePS as int
           } in prestServNoBanco)
-        PrestServ(id: pIdPS, nome: pNomePS, email: pEmailPS, telefone: pTelefonePS),
+        PrestServ(id: pIdPSer, nome: pNomePS, email: pEmailPS, telefone: pTelefonePS),
    ];
   }
 
@@ -159,10 +157,10 @@ Future<int> inserirCliente(Map<String, dynamic> row) async {
 
     return [
       for (final {
-            colunaIdServ: pIdS as int,
+            colunaIdServ: pIdSer as int,
             colunaNomeServ: pNomeS as String
           } in ServNoBanco)
-       Servico(id: pIdS, nome: pNomeS),
+       Servico(id: pIdSer, nome: pNomeS),
    ];
   }
 
@@ -174,11 +172,11 @@ Future<int> inserirCliente(Map<String, dynamic> row) async {
 
     return [
       for (final {
-            colunaIdCliente: pIdCli as int,
+            colunaIdCliente: pIdCliente as int,
             colunaNomeCliente: pNomeCli as String,  
             colunaEmailCliente: pEmailCli as String
           } in ClienteNoBanco)
-       cliente(id: pIdCli, nome: pNomeCli, email: pEmailCli),
+       cliente(id: pIdCliente, nome: pNomeCli, email: pEmailCli),
    ];
   }
 
@@ -213,8 +211,8 @@ Future<int> inserirCliente(Map<String, dynamic> row) async {
     );
   }
   
-  Future<List<Map<String, dynamic>>> queryByName(String name) async {
+  Future<List<Map<String, dynamic>>> queryByName(String nome) async {
     Database db = await iniciarBD();
-    return await db.query(tabelaServ, where: '$colunaNomeServ = ?', whereArgs: [name]);
+    return await db.query(tabelaServ, where: '$colunaNomeServ = ?', whereArgs: [nome]);
   }
 }

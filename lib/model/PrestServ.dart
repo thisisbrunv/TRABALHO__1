@@ -5,14 +5,13 @@ class PrestServ {
   String? nome;
   String? email;
   int? telefone;
-  String? servico;
+  //String? servico;
   
   PrestServ({
      this.id,
      this.nome,
      this.email,
-     this.telefone,
-     this.servico
+     this.telefone
   });
   
   Map<String, Object?> toMap() {
@@ -21,12 +20,12 @@ class PrestServ {
       'nome': nome,
       'email': email,
       'telefone': telefone,
-      'servico': servico,
+      //'servico': servico,
     };
   }
 
   @override
   String toString() {
-    return 'Pessoa { nome: $nome, email: $email, telefone: $telefone, servico: $servico}';
+    return 'Pessoa { nome: $nome, email: $email, telefone: $telefone}';
   }
 }

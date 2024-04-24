@@ -33,7 +33,7 @@ class BancoHelper {
   static const colunaNomeCliente = 'nome';
   static const colunaEmailCliente = 'email';
 
-  static late Database _bancoDeDados;
+  static Database? _database;
 
    // Aplicação do padrão Singleton na classe.
   BancoHelper._privateConstructor();
@@ -42,16 +42,17 @@ class BancoHelper {
   // Configurar a intância única da classe. 
   // Abre a base de dados (e cria quando ainda não existir).
   Future<Database> get database async {
-
-    _bancoDeDados = await iniciarBD();
-    return _bancoDeDados;
+    if(_database != null) return _database!;
+    _database = await iniciarBD();
+    return _database!;
   }
 
   iniciarBD() async {
     String caminhoBD = await getDatabasesPath();
     String path = join(caminhoBD, arquivoDoBancoDeDados);
 
-    _bancoDeDados = await openDatabase(
+    // Retorna o bd
+    return await openDatabase(
         path,
         version: arquivoDoBancoDeDadosVersao, 
         onCreate: funcaoCriacaoBD, 
@@ -94,7 +95,7 @@ class BancoHelper {
   }
 
   Future<List<Map<String, dynamic>>> queryByName(String name) async {
-    Database db = await instance.database;
+    Database db = await iniciarBD();
     return await db.query(tabelaServ, where: '$colunaNomeServ = ?', whereArgs: [name]);
   }
 
@@ -104,35 +105,35 @@ class BancoHelper {
   }
 
   Future<int> inserir(Map<String, dynamic> row) async {
-    await iniciarBD();
-    return await _bancoDeDados.insert(tabela, row);
+    Database db = await iniciarBD();
+    return await db.insert(tabela, row);
   }
 
   Future<int> deletarTodos() async {
-    await iniciarBD();
-    return _bancoDeDados.delete(tabela);
+    Database db = await iniciarBD();
+    return db.delete(tabela);
   }
 
   Future<int> deletar(int idPSer) async {
-    await iniciarBD();
-    return _bancoDeDados.delete(tabela, where: '$colunaIdPSer = ?', whereArgs: [idPSer]);
+    Database db = await iniciarBD();
+    return db.delete(tabela, where: '$colunaIdPSer = ?', whereArgs: [idPSer]);
   }
 
  Future<int> deletarServ(int idServ) async {
-    await iniciarBD();
-    return _bancoDeDados.delete(tabelaServ, where: '$colunaIdServ = ?', whereArgs: [idServ]);
+    Database db = await iniciarBD();
+    return db.delete(tabelaServ, where: '$colunaIdServ = ?', whereArgs: [idServ]);
   }
 
   Future<int> deletarC(int idCliente) async {
-    await iniciarBD();
-    return _bancoDeDados.delete(tabelaC, where: '$colunaIdCliente= ?', whereArgs: [idCliente]);
+    Database db = await iniciarBD();
+    return db.delete(tabelaC, where: '$colunaIdCliente= ?', whereArgs: [idCliente]);
   }
 
   Future<List<PrestServ>> buscarPrestServ() async {
-    await iniciarBD();
+    Database db = await iniciarBD();
     
     final List<Map<String, Object?>> prestServNoBanco =
-        await _bancoDeDados.query(tabela);
+        await db.query(tabela);
 
     return [
       for (final {
@@ -146,10 +147,10 @@ class BancoHelper {
   }
 
   Future<List<Servico>> buscarServ() async {
-    await iniciarBD();
+    Database db = await iniciarBD();
     
     final List<Map<String, Object?>> ServNoBanco =
-        await _bancoDeDados.query(tabelaServ);
+        await db.query(tabelaServ);
 
     return [
       for (final {
@@ -161,10 +162,10 @@ class BancoHelper {
   }
 
   Future<List<cliente>> buscarCliente() async {
-    await iniciarBD();
+    Database db = await iniciarBD();
     
     final List<Map<String, Object?>> ClienteNoBanco =
-        await _bancoDeDados.query(tabelaC);
+        await db.query(tabelaC);
 
     return [
       for (final {
@@ -177,9 +178,9 @@ class BancoHelper {
   }
 
   Future<void> editar(PrestServ regPessoa) async {
-    await iniciarBD();
+    Database db = await iniciarBD();
 
-    await _bancoDeDados.update(
+    await db.update(
       tabela,
       regPessoa.toMap(),
       where: '$colunaIdPSer = ?',
@@ -187,9 +188,9 @@ class BancoHelper {
     );
   }
   Future<void> editarServ(Servico regServico) async {
-    await iniciarBD();
+    Database db = await iniciarBD();
 
-    await _bancoDeDados.update(
+    await db.update(
       tabelaServ,
       regServico.toMap(),
       where: '$colunaIdServ = ?',
@@ -197,9 +198,9 @@ class BancoHelper {
     );
   }
    Future<void> editarCli(cliente regCli) async {
-    await iniciarBD();
+    Database db = await iniciarBD();
 
-    await _bancoDeDados.update(
+    await db.update(
       tabelaC,
       regCli.toMap(),
       where: '$colunaIdCliente = ?',

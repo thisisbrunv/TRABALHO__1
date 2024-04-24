@@ -176,6 +176,17 @@ void carregarClientesSalvos() async {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BarraPesquisa(prestadores: [],),
+                        ),
+                      );
+                    },
+                    child: const Text('Ir para Barra de Pesquisa'),
+                  ),
+                    ElevatedButton(
                         onPressed: () {
                           removerTudo();
                         },

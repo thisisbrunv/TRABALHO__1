@@ -307,7 +307,7 @@ class _SearchFormState extends State<SearchForm> {
                 itemCount: _searchResult!.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(_searchResult![index]['nomeServ']),
+                    title: Text(_searchResult![index][BancoHelper.colunaNomeServ]),
                   );
                 },
               ),

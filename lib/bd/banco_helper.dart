@@ -42,7 +42,6 @@ class BancoHelper {
   // Configurar a intância única da classe. 
   // Abre a base de dados (e cria quando ainda não existir).
   Future<Database> get database async {
-    if (_bancoDeDados != null) return _bancoDeDados;
 
     _bancoDeDados = await iniciarBD();
     return _bancoDeDados;

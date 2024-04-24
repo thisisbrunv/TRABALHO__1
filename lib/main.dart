@@ -7,7 +7,7 @@ import 'package:trab_1/model/cliente.dart';
 import 'package:trab_1/pessoa_detalhe.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:sqflite/sqflite.dart';
+
 
 
 void main() => runApp(const MainApp());
@@ -24,6 +24,8 @@ class MainApp extends StatelessWidget {
     );
   }
 }
+
+
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -152,6 +154,7 @@ void carregarClientesSalvos() async {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SearchForm(),
                 Expanded(
                   child: ListView.builder(
                     itemCount: _dados.length, 
@@ -282,29 +285,29 @@ class _SearchFormState extends State<SearchForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           TextField(
             controller: _controller,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Procura por serviço',
             ),
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: _search,
-            child: Text('busca'),
+            child: const Text('busca'),
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           if (_searchResult != null)
             Expanded(
               child: ListView.builder(
                 itemCount: _searchResult!.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(_searchResult![index]['Nome']),
+                    title: Text(_searchResult![index]['nomeServ']),
                   );
                 },
               ),

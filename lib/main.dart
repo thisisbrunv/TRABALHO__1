@@ -293,7 +293,7 @@ class SearchResultScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Resultados da busca'),
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
+      body: FutureBuilder<List<Servico>>(
         future: BancoHelper.instance.queryByName(searchTerm),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -301,12 +301,14 @@ class SearchResultScreen extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            List<Map<String, dynamic>> data= snapshot.data!;
+            List<Servico> data= snapshot.data!;
+            print(data);
             return ListView.builder(
               itemCount: data.length,
               itemBuilder: (context, index) {
+                final serv = data[index];
                 return ListTile(
-                  title: Text(data[index][BancoHelper.colunaNomeServ]),
+                  title: Text(serv.nome!),
                 );
               },
             );
@@ -330,9 +332,10 @@ class SearchForm extends StatefulWidget {
   _SearchFormState createState() => _SearchFormState();
 }
 
+
 class _SearchFormState extends State<SearchForm> {
-  final TextEditingController _controller = TextEditingController();
- 
+  final TextEditingController controller = TextEditingController(); 
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -341,7 +344,7 @@ class _SearchFormState extends State<SearchForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           TextField(
-            controller: _controller,
+            controller: controller,
             decoration: const InputDecoration(
               labelText: 'Procurar por serviço',
             ),
@@ -352,7 +355,8 @@ class _SearchFormState extends State<SearchForm> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SearchResultScreen(searchTerm: BancoHelper.colunaNomeServ),
+                  // Usar o texto do campo
+                  builder: (context) => SearchResultScreen(searchTerm: controller.text.trim()),
                 ),
               );
             },

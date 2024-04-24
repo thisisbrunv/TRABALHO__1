@@ -19,7 +19,7 @@ class _ClienteDetalheState extends State<ClienteDetalhe> {
 
   final _formKey = GlobalKey<FormState>();
 
-  var bdHelper = BancoHelper._privateConstructor();
+  var bdHelper = BancoHelper.instance;
 
   @override
   void initState() {

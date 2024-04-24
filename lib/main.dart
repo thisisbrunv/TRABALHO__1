@@ -34,7 +34,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
-  var bdHelper = BancoHelper._privateConstructor();
+  var bdHelper = BancoHelper.instance;
   
   final List<PrestServ> _dados = [];
   final List<Servico> _dadosServ = [];
@@ -139,14 +139,6 @@ void carregarClientesSalvos() async {
     carregarClientesSalvos();
   }
 
-  _query() async {
-
-    // raw query
-    List<Map> result = await db.rawQuery("SELECT * FROM ${BancoHelper.tabelaServ}");
-
-    // get each row in the result list and print it
-    result.forEach((row) => print(row));
-  }
 
  @override
   Widget build(BuildContext context) {
@@ -184,17 +176,6 @@ void carregarClientesSalvos() async {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BarraPesquisa(prestadores: [],),
-                        ),
-                      );
-                    },
-                    child: const Text('Ir para Barra de Pesquisa'),
-                  ),
                     ElevatedButton(
                         onPressed: () {
                           removerTudo();
@@ -253,18 +234,10 @@ ElevatedButton(
 )
                   ]
                 ), 
-Row( mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-ElevatedButton(
-    child: Text('query', style: TextStyle(fontSize: 20),),
-        onPressed: () {_query();}
-)
-                  ]
-                ) 
               ],
             ),    
+        ), 
         ),
-      ),  
        floatingActionButton: Builder(
           builder: (BuildContext context) {
             return FloatingActionButton(
@@ -285,6 +258,59 @@ ElevatedButton(
           },
         ),
         ),
-      );
+    );
     }
+}
+class SearchForm extends StatefulWidget {
+  @override
+  _SearchFormState createState() => _SearchFormState();
+}
+
+class _SearchFormState extends State<SearchForm> {
+  final TextEditingController _controller = TextEditingController();
+  List<Map<String, dynamic>>? _searchResult;
+
+  void _search() async {
+    final String name = _controller.text;
+    List<Map<String, dynamic>> result =
+        await BancoHelper.instance.queryByName(name);
+    setState(() {
+      _searchResult = result;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          TextField(
+            controller: _controller,
+            decoration: InputDecoration(
+              labelText: 'Procura por serviço',
+            ),
+          ),
+          SizedBox(height: 16.0),
+          ElevatedButton(
+            onPressed: _search,
+            child: Text('busca'),
+          ),
+          SizedBox(height: 16.0),
+          if (_searchResult != null)
+            Expanded(
+              child: ListView.builder(
+                itemCount: _searchResult!.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_searchResult![index]['Nome']),
+                  );
+                },
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }

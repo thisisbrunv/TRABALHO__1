@@ -21,7 +21,7 @@ class _PessoaDetalheState extends State<PessoaDetalhePS> {
 
   final _formKey = GlobalKey<FormState>();
 
-  var bdHelper = BancoHelper._privateConstructor();
+  var bdHelper = BancoHelper.instance;
 
   @override
   void initState() {

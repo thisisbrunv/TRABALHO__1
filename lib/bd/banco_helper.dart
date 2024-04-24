@@ -94,6 +94,11 @@ class BancoHelper {
     
   }
 
+  Future<List<Map<String, dynamic>>> queryByName(String name) async {
+    Database db = await instance.database;
+    return await db.query(tabelaServ, where: '$colunaNomeServ = ?', whereArgs: [name]);
+  }
+
   Future funcaoDowngradeBD(Database db, int oldVersion, int newVersion) async {
     //controle dos comandos sql para voltar versãoes. 
     //Estava-se na 2 e optou-se por regredir para a 1

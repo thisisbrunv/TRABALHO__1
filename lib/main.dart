@@ -7,7 +7,7 @@ import 'package:trab_1/model/cliente.dart';
 import 'package:trab_1/pessoa_detalhe.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
-
+import 'package:sqflite/sqflite.dart';
 
 
 void main() => runApp(const MainApp());
@@ -33,8 +33,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  var bdHelper = BancoHelper();
 
+  var bdHelper = BancoHelper._privateConstructor();
   
   final List<PrestServ> _dados = [];
   final List<Servico> _dadosServ = [];
@@ -139,6 +139,15 @@ void carregarClientesSalvos() async {
     carregarClientesSalvos();
   }
 
+  _query() async {
+
+    // raw query
+    List<Map> result = await db.rawQuery("SELECT * FROM ${BancoHelper.tabelaServ}");
+
+    // get each row in the result list and print it
+    result.forEach((row) => print(row));
+  }
+
  @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -206,22 +215,6 @@ ElevatedButton(
   },
   child: const Text('Adicionar Serviço'),
 )
-                    /*
-                    ElevatedButton(
-                        onPressed: (){
-                          Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ServDetalhe(
-                      informacaoServ: null,
-                    ),
-                  ),
-                  ).then((value) {
-                  carregarServicosSalvos();
-                  });
-                        },
-                        child: const Text('Adicionar Serviço'),
-                  ),*/
                   ]
                 ),
                   Row( mainAxisAlignment: MainAxisAlignment.center,
@@ -247,24 +240,16 @@ ElevatedButton(
   },
   child: const Text('Adicionar Cliente'),
 )
-
-                   /* ElevatedButton(
-                        onPressed: (){
-                          Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ClienteDetalhe(
-                      informacaoCliente: null,
-                    ),
-                  ),
-                  ).then((value) {
-                  carregarClientesSalvos();
-                  });
-                        },
-                        child: const Text('Adicionar Cliente'),
-                  ),*/
                   ]
-                )
+                ), 
+Row( mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+ElevatedButton(
+    child: Text('query', style: TextStyle(fontSize: 20),),
+        onPressed: () {_query();}
+)
+                  ]
+                ) 
               ],
             ),    
         ),
@@ -291,4 +276,4 @@ ElevatedButton(
         ),
       );
     }
-  }
+}

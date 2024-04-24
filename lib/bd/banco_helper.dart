@@ -35,11 +35,25 @@ class BancoHelper {
 
   static late Database _bancoDeDados;
 
+   // Aplicação do padrão Singleton na classe.
+  BancoHelper._privateConstructor();
+  static final BancoHelper instance = BancoHelper._privateConstructor();
+
+  // Configurar a intância única da classe. 
+  // Abre a base de dados (e cria quando ainda não existir).
+  Future<Database> get database async {
+    if (_bancoDeDados != null) return _bancoDeDados;
+
+    _bancoDeDados = await iniciarBD();
+    return _bancoDeDados;
+  }
+
   iniciarBD() async {
     String caminhoBD = await getDatabasesPath();
     String path = join(caminhoBD, arquivoDoBancoDeDados);
 
-    _bancoDeDados = await openDatabase(path,
+    _bancoDeDados = await openDatabase(
+        path,
         version: arquivoDoBancoDeDadosVersao, 
         onCreate: funcaoCriacaoBD, 
         onUpgrade: funcaoAtualizarBD, 
@@ -47,6 +61,7 @@ class BancoHelper {
   }
 
   Future funcaoCriacaoBD(Database db, int version) async {
+    
     await db.execute('''
         CREATE TABLE $tabela (
           $colunaIdPSer INTEGER PRIMARY KEY,
@@ -61,7 +76,7 @@ class BancoHelper {
           $colunaNomeServ TEXT
           );
            ''');
-  await db.execute(''' 
+      await db.execute(''' 
         CREATE TABLE $tabelaC (
           $colunaIdCliente INTEGER PRIMARY KEY,
           $colunaNomeCliente TEXT,

@@ -16,22 +16,22 @@ class BancoHelper {
   static const colunaNomePSer = 'nome';
   static const colunaEmailPSer = 'email';
   static const colunaTelefonePSer = 'telefone';
-  //static const tipoServ = 'tipoServ';
+  
 
 
   //pagina serviço
 
   static const tabelaServ = 'servico';
-  static const colunaIdServ = 'id';
-  static const colunaNomeServ = 'nome';
+  static const colunaIdServ = 'idServico';
+  static const colunaNomeServ = 'nomeServico';
 
 
   //pagina cliente
 
   static const tabelaC = 'cliente';
-  static const colunaIdCliente = 'id';
-  static const colunaNomeCliente = 'nome';
-  static const colunaEmailCliente = 'email';
+  static const colunaIdCliente = 'idCliente';
+  static const colunaNomeCliente = 'nomeCliente';
+  static const colunaEmailCliente = 'emailCliente';
 
   static Database? _database;
 
@@ -94,11 +94,6 @@ class BancoHelper {
     
   }
 
-  Future<List<Map<String, dynamic>>> queryByName(String name) async {
-    Database db = await iniciarBD();
-    return await db.query(tabelaServ, where: '$colunaNomeServ = ?', whereArgs: [name]);
-  }
-
   Future funcaoDowngradeBD(Database db, int oldVersion, int newVersion) async {
     //controle dos comandos sql para voltar versãoes. 
     //Estava-se na 2 e optou-se por regredir para a 1
@@ -107,6 +102,16 @@ class BancoHelper {
   Future<int> inserir(Map<String, dynamic> row) async {
     Database db = await iniciarBD();
     return await db.insert(tabela, row);
+  }
+
+Future<int> inserirServ(Map<String, dynamic> row) async {
+    Database db = await iniciarBD();
+    return await db.insert(tabelaServ, row);
+  }
+
+Future<int> inserirCliente(Map<String, dynamic> row) async {
+    Database db = await iniciarBD();
+    return await db.insert(tabelaC, row);
   }
 
   Future<int> deletarTodos() async {
@@ -170,7 +175,7 @@ class BancoHelper {
     return [
       for (final {
             colunaIdCliente: pIdCli as int,
-            colunaNomeCliente: pNomeCli as String,
+            colunaNomeCliente: pNomeCli as String,  
             colunaEmailCliente: pEmailCli as String
           } in ClienteNoBanco)
        cliente(id: pIdCli, nome: pNomeCli, email: pEmailCli),
@@ -206,5 +211,10 @@ class BancoHelper {
       where: '$colunaIdCliente = ?',
       whereArgs: [regCli.id],
     );
+  }
+  
+  Future<List<Map<String, dynamic>>> queryByName(String name) async {
+    Database db = await iniciarBD();
+    return await db.query(tabelaServ, where: '$colunaNomeServ = ?', whereArgs: [name]);
   }
 }

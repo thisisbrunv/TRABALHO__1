@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:trab_1/ServDetalhe.dart';
 import 'package:trab_1/bd/banco_helper.dart';
 import 'package:trab_1/clientesDetalhe.dart';
@@ -24,8 +25,6 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-
-
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -55,7 +54,7 @@ void carregarServicosSalvos() async {
     var s = await bdHelper.buscarServ();
 
 setState(() {
-  _dados.clear();
+  _dadosServ.clear();
   _dadosServ.addAll(s);
 });
 }
@@ -63,7 +62,7 @@ setState(() {
 void carregarClientesSalvos() async {
     var t = await bdHelper.buscarCliente();
     setState(() {
-      _dados.clear();
+      _dadosCliente.clear();
         _dadosCliente.addAll(t);
 
     });
@@ -142,7 +141,7 @@ void carregarClientesSalvos() async {
   }
 
 
- @override
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -175,7 +174,26 @@ void carregarClientesSalvos() async {
                       );
                     },
                   ),
-                ), 
+                ),
+                /*Expanded(child: ListView.builder(
+                  itemCount: _dadosServ.length,
+                  itemBuilder: (context, index){
+                      return ListTile(
+                        title: Text(_dadosServ[index].nome ?? "Serviço não informado"),
+                        //toque
+                        onTap: () async {
+                          var param = _dadosServ[index];
+                         await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ServDetalhe(
+                                informacaoServ: param))
+                              );
+                              carregarServicosSalvos();
+                        },
+                      );
+                })
+                ), */
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -271,16 +289,16 @@ class SearchForm extends StatefulWidget {
 
 class _SearchFormState extends State<SearchForm> {
   final TextEditingController _controller = TextEditingController();
-  List<Map<String, dynamic>>? _searchResult;
+  //List<Map<String, dynamic>>? _searchResult;
 
-  void _search() async {
+/*  void _search() async {
     final String name = _controller.text;
     List<Map<String, dynamic>> result =
         await BancoHelper.instance.queryByName(name);
     setState(() {
       _searchResult = result;
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -292,27 +310,56 @@ class _SearchFormState extends State<SearchForm> {
           TextField(
             controller: _controller,
             decoration: const InputDecoration(
-              labelText: 'Procura por serviço',
+              labelText: 'Procurar por serviço',
             ),
           ),
           const SizedBox(height: 16.0),
           ElevatedButton(
-            onPressed: _search,
-            child: const Text('busca'),
+            onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchResultScreen(searchTerm: BancoHelper.colunaNomeServ),
+                ),
+              );
+            },
+            child: Text('Busca'),
           ),
-          const SizedBox(height: 16.0),
-          if (_searchResult != null)
-            Expanded(
-              child: ListView.builder(
-                itemCount: _searchResult!.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(_searchResult![index][BancoHelper.colunaNomeServ]),
-                  );
-                },
-              ),
-            ),
         ],
+      ),
+    );
+  }
+}
+class SearchResultScreen extends StatelessWidget {
+  final String searchTerm;
+
+  SearchResultScreen({required this.searchTerm});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Resultados da busca'),
+      ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: BancoHelper.instance.queryByName(searchTerm),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            List<Map<String, dynamic>> data = snapshot.data!;
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(data[index][BancoHelper.colunaNomeServ]),
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }

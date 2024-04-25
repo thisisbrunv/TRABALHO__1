@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:trab_1/ServDetalhe.dart';
 import 'package:trab_1/bd/banco_helper.dart';
 import 'package:trab_1/clientesDetalhe.dart';
@@ -8,8 +7,6 @@ import 'package:trab_1/model/cliente.dart';
 import 'package:trab_1/pessoa_detalhe.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
-
-
 
 void main() => runApp(const MainApp());
 // runApp(const MainApp());
@@ -367,42 +364,3 @@ class _SearchFormState extends State<SearchForm> {
     );
   }
 }
-/*class SearchResultScreen extends StatelessWidget {
-  final String searchTerm;
-
-  const SearchResultScreen({super.key, required this.searchTerm});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Resultados da busca'),
-      ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: BancoHelper.instance.queryByName(searchTerm),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            List<Map<String, dynamic>> data = snapshot.data!;
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(data[index][BancoHelper.colunaNomeServ]),
-                );
-              },
-            );
-          }
-        },
-      ),
-      floatingActionButton: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Fechar'))
-    );
-  }
-}*/

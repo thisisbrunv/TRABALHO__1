@@ -212,15 +212,22 @@ Future<int> inserirCliente(Map<String, dynamic> row) async {
   }
   
   Future<List<Servico>> queryByName(String nome) async {
-    Database db = await iniciarBD();
+  Database db = await iniciarBD();
 
-    List<Map<String, dynamic>> help = await db.query(tabelaServ, where: '$colunaNomeServ = ?', whereArgs: [nome]);
+  // Adicionando '%' ao nome para pesquisa parcial
+  String partialName = '%$nome%';
 
-    return List.generate(help.length, (index) {
-      return Servico(
-        id: help[index]['id'],
-        nome: help[index]['nome'],
-      );
-    });
-  }
+  List<Map<String, dynamic>> help = await db.query(
+    tabelaServ,
+    where: '$colunaNomeServ LIKE ?',
+    whereArgs: [partialName],
+  );
+
+  return List.generate(help.length, (index) {
+    return Servico(
+      id: help[index]['id'],
+      nome: help[index]['nome'],
+    );
+  });
+}
 }

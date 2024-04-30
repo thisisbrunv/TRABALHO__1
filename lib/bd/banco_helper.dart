@@ -16,13 +16,18 @@ class BancoHelper {
   static const colunaNomePSer = 'nome';
   static const colunaEmailPSer = 'email';
   static const colunaTelefonePSer = 'telefone';
+  static const colunaSenhaPSer = 'senha';
+  static const colunaAvaliacaoPSer = 'avaliacao';
+  static const colunaFotoPSer = 'foto';
   
   //pagina serviço
 
   static const tabelaServ = 'servico';
   static const colunaIdServ = 'id';
   static const colunaNomeServ = 'nome';
-
+  static const colunaCategoriaServ = 'categoria';
+  static const colunaDescricaoServ = 'descricao';
+  static const colunaPrecoServ = 'preco';
 
   //pagina cliente
 
@@ -30,6 +35,8 @@ class BancoHelper {
   static const colunaIdCliente = 'id';
   static const colunaNomeCliente = 'nome';
   static const colunaEmailCliente = 'email';
+  static const colunaSenhaCliente = 'senha';
+  static const colunaFotoCliente = 'foto';
 
   static Database? _database;
 
@@ -65,20 +72,28 @@ class BancoHelper {
           $colunaIdPSer INTEGER PRIMARY KEY,
           $colunaNomePSer TEXT, 
           $colunaEmailPSer TEXT,
-          $colunaTelefonePSer INTEGER
+          $colunaTelefonePSer INTEGER,
+          $colunaSenhaPSer TEXT,
+          $colunaAvaliacaoPSer INTEGER,
+          $colunaFotoPSer TEXT
         );
         ''');
        await db.execute(''' 
        CREATE TABLE $tabelaServ (
           $colunaIdServ INTEGER PRIMARY KEY,
-          $colunaNomeServ TEXT
+          $colunaNomeServ TEXT,
+          $colunaCategoriaServ TEXT,
+          $colunaDescricaoServ TEXT,
+          $colunaPrecoServ INTEGER
           );
            ''');
       await db.execute(''' 
         CREATE TABLE $tabelaC (
           $colunaIdCliente INTEGER PRIMARY KEY,
           $colunaNomeCliente TEXT,
-          $colunaEmailCliente TEXT 
+          $colunaEmailCliente TEXT,
+          $colunaSenhaCliente TEXT,
+          $colunaFotoCliente TEXT
         );
   ''');
   }
@@ -143,9 +158,12 @@ Future<int> inserirCliente(Map<String, dynamic> row) async {
             colunaIdPSer: pIdPSer as int,
             colunaNomePSer: pNomePS as String,
             colunaEmailPSer: pEmailPS as String,
-            colunaTelefonePSer: pTelefonePS as int
+            colunaTelefonePSer: pTelefonePS as int,
+            colunaSenhaPSer: pSenhaPS as String,
+            colunaAvaliacaoPSer: pAvaliacaoPS as int,
+            colunaFotoPSer: pFotoPS as String
           } in prestServNoBanco)
-        PrestServ(id: pIdPSer, nome: pNomePS, email: pEmailPS, telefone: pTelefonePS),
+        PrestServ(id: pIdPSer, nome: pNomePS, email: pEmailPS, telefone: pTelefonePS, senha: pSenhaPS, avaliacao: pAvaliacaoPS, foto: pFotoPS),
    ];
   }
 
@@ -158,9 +176,12 @@ Future<int> inserirCliente(Map<String, dynamic> row) async {
     return [
       for (final {
             colunaIdServ: pIdSer as int,
-            colunaNomeServ: pNomeS as String
+            colunaNomeServ: pNomeS as String,
+            colunaCategoriaServ: pCategoriaS as String,
+            colunaDescricaoServ: pDescricaoS as String, 
+            colunaPrecoServ: pPrecoS as int
           } in ServNoBanco)
-       Servico(id: pIdSer, nome: pNomeS),
+       Servico(id: pIdSer, nome: pNomeS, categoria: pCategoriaS, descricao: pDescricaoS, preco: pPrecoS),
    ];
   }
 
@@ -174,9 +195,11 @@ Future<int> inserirCliente(Map<String, dynamic> row) async {
       for (final {
             colunaIdCliente: pIdCliente as int,
             colunaNomeCliente: pNomeCli as String,  
-            colunaEmailCliente: pEmailCli as String
+            colunaEmailCliente: pEmailCli as String,
+            colunaSenhaCliente: pSenhaCli as String, 
+            colunaFotoCliente: pFotoCli as String
           } in ClienteNoBanco)
-       cliente(id: pIdCliente, nome: pNomeCli, email: pEmailCli),
+       cliente(id: pIdCliente, nome: pNomeCli, email: pEmailCli, senha: pSenhaCli, foto: pFotoCli),
    ];
   }
 

@@ -18,6 +18,9 @@ class _PessoaDetalheState extends State<PessoaDetalhePS> {
   final TextEditingController _controllerNomePS = TextEditingController();
   final TextEditingController _controllerEmailPS = TextEditingController();
   final TextEditingController _controllerTelefonePS = TextEditingController();
+  final TextEditingController _controllerSenhaPS = TextEditingController();
+  final TextEditingController _controllerAvaliacaoPS = TextEditingController();
+  final TextEditingController _controllerFotoPS = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -32,6 +35,9 @@ class _PessoaDetalheState extends State<PessoaDetalhePS> {
       _controllerNomePS.text = widget.informacaoPessoaPS?.nome ?? '';
       _controllerEmailPS.text = widget.informacaoPessoaPS?.email ?? '';
       _controllerTelefonePS.text = widget.informacaoPessoaPS?.telefone.toString() ?? '';
+      _controllerSenhaPS.text = widget.informacaoPessoaPS?.senha ?? '';
+      _controllerAvaliacaoPS.text = widget.informacaoPessoaPS?.avaliacao.toString() ?? '';
+      _controllerFotoPS.text = widget.informacaoPessoaPS?.foto ?? '';
     }
   }
 
@@ -41,6 +47,9 @@ class _PessoaDetalheState extends State<PessoaDetalhePS> {
     _controllerNomePS.dispose();
     _controllerEmailPS.dispose();
     _controllerTelefonePS.dispose();
+    _controllerSenhaPS.dispose();
+    _controllerAvaliacaoPS.dispose();
+    _controllerFotoPS.dispose();
     super.dispose();
   }
 
@@ -130,6 +139,28 @@ class _PessoaDetalheState extends State<PessoaDetalhePS> {
                     }
                     return null;
                   },
+                ),
+                TextFormField(
+                  controller: _controllerSenhaPS,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: const InputDecoration(
+                      labelText: 'Senha',
+                      border: OutlineInputBorder() //Gera a borda toda no campo.
+                      ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'É obrigatório informar a Senha.';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _controllerAvaliacaoPS,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                      labelText: 'Avaliacao',
+                      border: OutlineInputBorder() //Gera a borda toda no campo.
+                      ),
                 ),
                 const SizedBox(height: 40),
                 ElevatedButton(

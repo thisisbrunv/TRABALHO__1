@@ -19,7 +19,7 @@ class _ServDetalheState extends State<ServDetalhe> {
 
   final _formKey = GlobalKey<FormState>();
 
-  var bdHelper = BancoHelper();
+  var bdHelper = BancoHelper.instance;
 
   @override
   void initState() {
@@ -103,7 +103,7 @@ class _ServDetalheState extends State<ServDetalhe> {
                           BancoHelper.colunaNomePSer: _controllerNomeServ.text
                         };
         
-                        final idEmOperacao = await bdHelper.inserir(row);
+                        final idEmOperacao = await bdHelper.inserirServ(row);
                         _controllerIdServ.text = idEmOperacao.toString();
                       }
                     }

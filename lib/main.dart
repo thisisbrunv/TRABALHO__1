@@ -8,20 +8,31 @@ import 'package:trab_1/pessoa_detalhe.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-void main() => runApp(MainApp());
- // runApp(const MainApp());
+void main() => runApp(const MainApp());
+// runApp(const MainApp());
 //}
 
-class MainApp extends StatefulWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: MainScreen(),
+    );
+  }
 }
 
-class _MainAppState extends State<MainApp> {
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
-  var bdHelper = BancoHelper();
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+
+  var bdHelper = BancoHelper.instance;
   
   final List<PrestServ> _dados = [];
   final List<Servico> _dadosServ = [];
@@ -40,7 +51,7 @@ void carregarServicosSalvos() async {
     var s = await bdHelper.buscarServ();
 
 setState(() {
-  _dados.clear();
+  _dadosServ.clear();
   _dadosServ.addAll(s);
 });
 }
@@ -48,7 +59,7 @@ setState(() {
 void carregarClientesSalvos() async {
     var t = await bdHelper.buscarCliente();
     setState(() {
-      _dados.clear();
+      _dadosCliente.clear();
         _dadosCliente.addAll(t);
 
     });
@@ -60,6 +71,7 @@ void carregarClientesSalvos() async {
     final nomePS = 'PrestServ ${rnd.nextInt(999999)}';
     final emailPS = 'PrestServ ${rnd.nextInt(999999)}';
     final telefonePS = rnd.nextInt(99);
+    
 
     Map<String, dynamic> row = {
       BancoHelper.colunaNomePSer: nomePS,
@@ -75,6 +87,43 @@ void carregarClientesSalvos() async {
     carregarPessoasSalvas();
   }
 
+  Future<void> inserirRegistroServ() async {
+    var rnd = Random();
+
+    final nomeServ = 'Serv ${rnd.nextInt(999999)}';
+  
+    Map<String, dynamic> row = {
+      BancoHelper.colunaNomeServ: nomeServ,
+    };
+
+    final id = await bdHelper.inserir(row);
+
+    print(
+        'Pessoa inserida com ID $id para $nomeServ');
+
+    carregarServicosSalvos();
+  }
+
+  Future<void> inserirRegistroCliente() async {
+    var rnd = Random();
+
+    final nomeCliente = 'cliente ${rnd.nextInt(999999)}';
+    final emailCliente = 'cliente ${rnd.nextInt(999999)}';
+    
+
+    Map<String, dynamic> row = {
+      BancoHelper.colunaNomeCliente: nomeCliente,
+      BancoHelper.colunaEmailCliente: emailCliente,
+    };
+
+    final id = await bdHelper.inserir(row);
+
+    print(
+        'Pessoa inserida com ID $id para $nomeCliente');
+
+    carregarClientesSalvos();
+  }
+
   void removerTudo() async {
     await bdHelper.deletarTodos();
     carregarPessoasSalvas();
@@ -88,6 +137,7 @@ void carregarClientesSalvos() async {
     carregarClientesSalvos();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -100,6 +150,7 @@ void carregarClientesSalvos() async {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SearchForm(),
                 Expanded(
                   child: ListView.builder(
                     itemCount: _dados.length, 
@@ -120,6 +171,25 @@ void carregarClientesSalvos() async {
                       );
                     },
                   ),
+                ),
+                Expanded(child: ListView.builder(
+                  itemCount: _dadosServ.length,
+                  itemBuilder: (context, index){
+                      return ListTile(
+                        title: Text(_dadosServ[index].nome ?? "Serviço não informado"),
+                        //toque
+                        onTap: () async {
+                          var param = _dadosServ[index];
+                         await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ServDetalhe(
+                                informacaoServ: param))
+                              );
+                              carregarServicosSalvos();
+                        },
+                      );
+                })
                 ), 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -129,42 +199,63 @@ void carregarClientesSalvos() async {
                           removerTudo();
                         },
                         child: const Text('Deletar Tudo')),
-                  ElevatedButton(
-                        onPressed: (){
-                          Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ServDetalhe(
-                      informacaoServ: null,
-                    ),
-                  ),
-                  ).then((value) {
-                  carregarServicosSalvos();
-                  });
-                        },
-                        child: const Text('Adicionar Serviço'),
-                  ),
-                  ElevatedButton(
-                        onPressed: (){
-                          Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ClienteDetalhe(
-                      informacaoCliente: null,
-                    ),
-                  ),
-                  ).then((value) {
-                  carregarClientesSalvos();
-                  });
-                        },
-                        child: const Text('Adicionar Cliente'),
-                  )
-              ],
-            ),
-          ],
-        ),
+                ],
+                ),
+                Row( 
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+ElevatedButton(
+  onPressed: (){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return Builder( 
+            builder: (BuildContext context) {
+              return const ServDetalhe(
+                informacaoServ: null,
+              );
+            },
+          );
+        },
       ),
-    ),    
+    ).then((value) {
+      carregarServicosSalvos();
+    });
+  },
+  child: const Text('Adicionar Serviço'),
+)
+                  ]
+                ),
+                  Row( mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+ElevatedButton(
+  onPressed: (){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return Builder( 
+            builder: (BuildContext context) {
+              return const ClienteDetalhe(
+                informacaoCliente: null,
+              );
+            },
+          );
+        },
+      ),
+    ).then((value) {
+      carregarClientesSalvos();
+    });
+  },
+  child: const Text('Adicionar Cliente'),
+)
+                  ]
+                ), 
+              ],
+            ),    
+        ), 
+        ),
        floatingActionButton: Builder(
           builder: (BuildContext context) {
             return FloatingActionButton(
@@ -184,6 +275,91 @@ void carregarClientesSalvos() async {
             );
           },
         ),
+        ),
+    );
+    }
+}
+class SearchResultScreen extends StatelessWidget {
+  final String searchTerm;
+
+  const SearchResultScreen({super.key, required this.searchTerm});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Resultados da busca'),
+      ),
+      body: FutureBuilder<List<Servico>>(
+        future: BancoHelper.instance.queryByName(searchTerm),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            List<Servico> data= snapshot.data!;
+            print(data);
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                final serv = data[index];
+                return ListTile(
+                  title: Text(serv.nome!),
+                );
+              },
+            );
+          }
+        },
+      ),
+      floatingActionButton: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Fechar'))
+    );
+  }
+}
+
+class SearchForm extends StatefulWidget {
+  const SearchForm({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _SearchFormState createState() => _SearchFormState();
+}
+
+
+class _SearchFormState extends State<SearchForm> {
+  final TextEditingController controller = TextEditingController(); 
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              labelText: 'Procurar por serviço',
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          ElevatedButton(
+            onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  // Usar o texto do campo
+                  builder: (context) => SearchResultScreen(searchTerm: controller.text.trim()),
+                ),
+              );
+            },
+            child: const Text('Busca'),
+          ),
+        ],
       ),
     );
   }

@@ -1,4 +1,5 @@
 
+
 import 'package:trab_1/bd/banco_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:trab_1/model/cliente.dart';
@@ -16,10 +17,13 @@ class ClienteDetalhe extends StatefulWidget {
 class _ClienteDetalheState extends State<ClienteDetalhe> {
   final TextEditingController _controllerIdCliente = TextEditingController();
   final TextEditingController _controllerNomeCliente = TextEditingController();
+  final TextEditingController _controllerEmailCliente = TextEditingController();
+  final TextEditingController _controllerSenhaCliente = TextEditingController();
+  final TextEditingController _controllerFotoCliente = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
-  var bdHelper = BancoHelper();
+  var bdHelper = BancoHelper.instance;
 
   @override
   void initState() {
@@ -28,6 +32,9 @@ class _ClienteDetalheState extends State<ClienteDetalhe> {
     if (widget.informacaoCliente != null) {
       _controllerIdCliente.text = widget.informacaoCliente?.id.toString() ?? '';
       _controllerNomeCliente.text = widget.informacaoCliente?.nome ?? '';
+      _controllerEmailCliente.text = widget.informacaoCliente?.email ?? '';
+      _controllerSenhaCliente.text = widget.informacaoCliente?.senha ?? '';
+      _controllerFotoCliente.text = widget.informacaoCliente?.foto ?? '';
     }
   }
 
@@ -35,6 +42,9 @@ class _ClienteDetalheState extends State<ClienteDetalhe> {
   void dispose() {
     _controllerIdCliente.dispose();
     _controllerNomeCliente.dispose();
+    _controllerEmailCliente.dispose();
+    _controllerSenhaCliente.dispose();
+    _controllerFotoCliente.dispose();
     super.dispose();
   }
 
@@ -91,6 +101,48 @@ class _ClienteDetalheState extends State<ClienteDetalhe> {
                     return null;
                   },
                 ),
+                TextFormField(
+                  controller: _controllerEmailCliente,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                      labelText: 'E-mail',
+                      border: OutlineInputBorder() //Gera a borda toda no campo.
+                      ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor preencha um valor para o campo E-mail.';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _controllerSenhaCliente,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: const InputDecoration(
+                      labelText: 'Senha',
+                      border: OutlineInputBorder() //Gera a borda toda no campo.
+                      ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor preencha um valor para o campo Senha.';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _controllerFotoCliente,
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(
+                      labelText: 'Foto',
+                      border: OutlineInputBorder() //Gera a borda toda no campo.
+                      ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor preencha um valor para o campo Foto.';
+                    }
+                    return null;
+                  },
+                ),
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () async {
@@ -103,7 +155,7 @@ class _ClienteDetalheState extends State<ClienteDetalhe> {
                           BancoHelper.colunaNomeCliente: _controllerNomeCliente.text
                         };
         
-                        final idEmOperacao = await bdHelper.inserir(row);
+                        final idEmOperacao = await bdHelper.inserirCliente(row);
                         _controllerIdCliente.text = idEmOperacao.toString();
                       }
                     }

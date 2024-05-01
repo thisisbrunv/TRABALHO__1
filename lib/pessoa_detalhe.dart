@@ -162,6 +162,14 @@ class _PessoaDetalheState extends State<PessoaDetalhePS> {
                       border: OutlineInputBorder() //Gera a borda toda no campo.
                       ),
                 ),
+                 TextFormField(
+                  controller: _controllerAvaliacaoPS,
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(
+                      labelText: 'Foto',
+                      border: OutlineInputBorder() //Gera a borda toda no campo.
+                      ),
+                ),
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () async {
@@ -171,12 +179,19 @@ class _PessoaDetalheState extends State<PessoaDetalhePS> {
                         widget.informacaoPessoaPS?.email = _controllerEmailPS.text;
                         widget.informacaoPessoaPS?.telefone =
                             int.parse(_controllerTelefonePS.text);
+                        widget.informacaoPessoaPS?.senha = _controllerSenhaPS.text;
+                        widget.informacaoPessoaPS?.avaliacao = 
+                            int.parse(_controllerAvaliacaoPS.text);
+                        widget.informacaoPessoaPS?.foto = _controllerFotoPS.text;   
                         await bdHelper.editar(widget.informacaoPessoaPS!);
                       } else {
                         Map<String, dynamic> row = {
                           BancoHelper.colunaNomePSer: _controllerNomePS.text,
                           BancoHelper.colunaEmailPSer: _controllerEmailPS.text,
-                          BancoHelper.colunaTelefonePSer: _controllerTelefonePS.text
+                          BancoHelper.colunaTelefonePSer: _controllerTelefonePS.text,
+                          BancoHelper.colunaSenhaPSer: _controllerSenhaPS.text,
+                          BancoHelper.colunaAvaliacaoPSer: _controllerAvaliacaoPS.text,
+                          BancoHelper.colunaFotoPSer: _controllerFotoPS
                         };
         
                         final idEmOperacao = await bdHelper.inserir(row);

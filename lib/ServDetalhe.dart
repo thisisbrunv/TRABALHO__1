@@ -16,6 +16,9 @@ class ServDetalhe extends StatefulWidget {
 class _ServDetalheState extends State<ServDetalhe> {
   final TextEditingController _controllerIdServ = TextEditingController();
   final TextEditingController _controllerNomeServ = TextEditingController();
+  final TextEditingController _controllerCategoriaServ = TextEditingController();
+  final TextEditingController _controllerDescServ = TextEditingController();
+  final TextEditingController _controllerPrecoServ = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -28,6 +31,9 @@ class _ServDetalheState extends State<ServDetalhe> {
     if (widget.informacaoServ != null) {
       _controllerIdServ.text = widget.informacaoServ?.id.toString() ?? '';
       _controllerNomeServ.text = widget.informacaoServ?.nome ?? '';
+      _controllerCategoriaServ.text = widget.informacaoServ?.categoria ?? '';
+      _controllerDescServ.text = widget.informacaoServ?.descricao ?? '';
+      _controllerPrecoServ.text = widget.informacaoServ?.preco.toString() ?? '';
     }
   }
 
@@ -35,6 +41,9 @@ class _ServDetalheState extends State<ServDetalhe> {
   void dispose() {
     _controllerIdServ.dispose();
     _controllerNomeServ.dispose();
+    _controllerCategoriaServ.dispose();
+    _controllerDescServ.dispose();
+    _controllerPrecoServ.dispose();
     super.dispose();
   }
 
@@ -91,16 +100,52 @@ class _ServDetalheState extends State<ServDetalhe> {
                     return null;
                   },
                 ),
+                TextFormField(
+                  controller: _controllerCategoriaServ,
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(
+                      labelText: 'Categoria',
+                      border: OutlineInputBorder() //Gera a borda toda no campo.
+                      ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor preencha um valor para o campo categoria.';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _controllerDescServ,
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(
+                      labelText: 'Descricao',
+                      border: OutlineInputBorder() //Gera a borda toda no campo.
+                      ),
+                ),
+                TextFormField(
+                  controller: _controllerPrecoServ,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                      labelText: 'Preco',
+                      border: OutlineInputBorder() //Gera a borda toda no campo.
+                      ),
+                ),
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       if (widget.informacaoServ != null) {
                         widget.informacaoServ?.nome = _controllerNomeServ.text;
+                        widget.informacaoServ?.categoria = _controllerCategoriaServ.text;
+                        widget.informacaoServ?.descricao = _controllerDescServ.text;
+                        widget,informacaoServ?.preco = _controllerPrecoServ.Text;
                         await bdHelper.editarServ(widget.informacaoServ!);
                       } else {
                         Map<String, dynamic> row = {
-                          BancoHelper.colunaNomePSer: _controllerNomeServ.text
+                          BancoHelper.colunaNomeServ: _controllerNomeServ.text,
+                          BancoHelper.colunaCategoriaServ: _controllerCategoriaServ.text,
+                          BancoHelper.colunaDescricaoServ: _controllerDescServ.text,
+                          BancoHelper.colunaPrecoServ: _controllerPrecoServ.text
                         };
         
                         final idEmOperacao = await bdHelper.inserirServ(row);

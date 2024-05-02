@@ -71,12 +71,18 @@ void carregarClientesSalvos() async {
     final nomePS = 'PrestServ ${rnd.nextInt(999999)}';
     final emailPS = 'PrestServ ${rnd.nextInt(999999)}';
     final telefonePS = rnd.nextInt(99);
+    final senhaPS = 'PrestServ ${rnd.nextInt(999999)}';
+    final avaliacaoPS = rnd.nextInt(99);
+    final fotoPS = 'PrestServ ${rnd.nextInt(999999)}';
     
 
     Map<String, dynamic> row = {
       BancoHelper.colunaNomePSer: nomePS,
       BancoHelper.colunaEmailPSer: emailPS,
-      BancoHelper.colunaTelefonePSer: telefonePS
+      BancoHelper.colunaTelefonePSer: telefonePS,
+      BancoHelper.colunaSenhaPSer: senhaPS,
+      BancoHelper.colunaAvaliacaoPSer: avaliacaoPS,
+      BancoHelper.colunaFotoPSer: fotoPS
     };
 
     final id = await bdHelper.inserir(row);
@@ -91,9 +97,15 @@ void carregarClientesSalvos() async {
     var rnd = Random();
 
     final nomeServ = 'Serv ${rnd.nextInt(999999)}';
+    final categoriaServ = 'Serv ${rnd.nextInt(999999)}';
+    final descricaoServ = 'Serv ${rnd.nextInt(999999)}';
+    final precoServ = rnd.nextInt(99);
   
     Map<String, dynamic> row = {
       BancoHelper.colunaNomeServ: nomeServ,
+      BancoHelper.colunaCategoriaServ: categoriaServ,
+      BancoHelper.colunaDescricaoServ: descricaoServ,
+      BancoHelper.colunaPrecoServ: precoServ
     };
 
     final id = await bdHelper.inserir(row);
@@ -109,11 +121,15 @@ void carregarClientesSalvos() async {
 
     final nomeCliente = 'cliente ${rnd.nextInt(999999)}';
     final emailCliente = 'cliente ${rnd.nextInt(999999)}';
+    final senhaCliente = 'cliente ${rnd.nextInt(999999)}';
+    final fotoCliente = 'cliente ${rnd.nextInt(999999)}';
     
 
     Map<String, dynamic> row = {
       BancoHelper.colunaNomeCliente: nomeCliente,
       BancoHelper.colunaEmailCliente: emailCliente,
+      BancoHelper.colunaSenhaCliente: senhaCliente,
+      BancoHelper.colunaFotoCliente: fotoCliente
     };
 
     final id = await bdHelper.inserir(row);

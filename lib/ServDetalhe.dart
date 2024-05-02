@@ -138,7 +138,7 @@ class _ServDetalheState extends State<ServDetalhe> {
                         widget.informacaoServ?.nome = _controllerNomeServ.text;
                         widget.informacaoServ?.categoria = _controllerCategoriaServ.text;
                         widget.informacaoServ?.descricao = _controllerDescServ.text;
-                        widget,informacaoServ?.preco = _controllerPrecoServ.Text;
+                        widget.informacaoServ?.preco = int.parse(_controllerPrecoServ.text);
                         await bdHelper.editarServ(widget.informacaoServ!);
                       } else {
                         Map<String, dynamic> row = {

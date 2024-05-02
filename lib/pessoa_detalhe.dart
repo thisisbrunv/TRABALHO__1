@@ -163,7 +163,7 @@ class _PessoaDetalheState extends State<PessoaDetalhePS> {
                       ),
                 ),
                  TextFormField(
-                  controller: _controllerAvaliacaoPS,
+                  controller: _controllerFotoPS,
                   keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
                       labelText: 'Foto',
@@ -191,7 +191,7 @@ class _PessoaDetalheState extends State<PessoaDetalhePS> {
                           BancoHelper.colunaTelefonePSer: _controllerTelefonePS.text,
                           BancoHelper.colunaSenhaPSer: _controllerSenhaPS.text,
                           BancoHelper.colunaAvaliacaoPSer: _controllerAvaliacaoPS.text,
-                          BancoHelper.colunaFotoPSer: _controllerFotoPS
+                          BancoHelper.colunaFotoPSer: _controllerFotoPS.text,
                         };
         
                         final idEmOperacao = await bdHelper.inserir(row);

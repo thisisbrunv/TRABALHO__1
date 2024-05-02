@@ -268,6 +268,30 @@ ElevatedButton(
 )
                   ]
                 ), 
+                     Row( 
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+ElevatedButton(
+  onPressed: (){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return Builder( 
+            builder: (BuildContext context) {
+              return const CameraScreen(
+                informacaoServ: null,
+              );
+            },
+          );
+        },
+      ),
+    );
+  },
+  child: const Text('Adicionar Foto'),
+)
+                  ]
+                ),
               ],
             ),    
         ), 

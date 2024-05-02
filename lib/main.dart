@@ -268,7 +268,7 @@ ElevatedButton(
 )
                   ]
                 ), 
-                     Row( 
+                    /* Row( 
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
 ElevatedButton(
@@ -291,7 +291,7 @@ ElevatedButton(
   child: const Text('Adicionar Foto'),
 )
                   ]
-                ),
+                ),*/
               ],
             ),    
         ), 

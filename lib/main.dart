@@ -360,6 +360,54 @@ class SearchResultScreen extends StatelessWidget {
     );
   }
 }
+/*class SearchResultScreen extends StatelessWidget {
+  final String searchTerm;
+
+  const SearchResultScreen({Key? key, required this.searchTerm}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Resultados da busca'),
+      ),
+      body: FutureBuilder<List<Servico>>(
+        future: BancoHelper.instance.queryByName(searchTerm),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            List<Servico> data = snapshot.data!;
+            print(data);
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                final serv = data[index];
+                return ListTile(
+                  title: Text(serv.nome!),
+                  trailing: ElevatedButton(
+                    onPressed: () {
+                      // Navegar para a tela do perfil com as informações do serviço
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ServiceProfileScreen(servico: serv),
+                        ),
+                      );
+                    },
+                    child: const Text('Ver perfil'),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+}*/
 
 class SearchForm extends StatefulWidget {
   const SearchForm({super.key});
@@ -404,3 +452,29 @@ class _SearchFormState extends State<SearchForm> {
     );
   }
 }
+
+/*class ServiceProfileScreen extends StatelessWidget {
+  final Servico servico;
+
+  const ServiceProfileScreen({Key? key, required this.servico}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(servico.nome!),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Categoria: ${servico.categoria}'),
+            Text('Descrição: ${servico.descricao}'),
+            Text('Preço: ${servico.preco}'),
+          ],
+        ),
+      ),
+    );
+  }
+}*/
